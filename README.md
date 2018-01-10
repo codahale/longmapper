@@ -29,9 +29,8 @@ class Example {
 
 ## How it works
 
-It encrypts each long as a 64-bit [XTEA](https://en.wikipedia.org/wiki/XTEA) block. This doesn't do
-much from a cryptographic perspective, but if your universe consists only of 64-bit integers, it's
-sufficient for obfuscation.
+It encrypts each `long` as a 64-bit [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher)) 
+block.
 
 ## Performance
 
@@ -39,8 +38,9 @@ It's fast. Plenty fast.
 
 ```
 Benchmark         Mode  Cnt    Score   Error  Units
-Benchmarks.map    avgt   20  115.175 ± 1.564  ns/op
-Benchmarks.unmap  avgt   20  119.450 ± 1.194  ns/op
+Benchmarks.map    avgt   20  114.266 ± 3.772  ns/op
+Benchmarks.unmap  avgt   20  109.040 ± 2.356  ns/op
+
 ```
 
 ## License

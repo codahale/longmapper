@@ -14,28 +14,35 @@
 
 package com.codahale.longmapper;
 
+import com.google.common.primitives.Longs;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.ShortBufferException;
+import javax.crypto.spec.SecretKeySpec;
+
 /** A class which uniquely maps 64-bit integers to other 64-bit integers. */
 public class LongMapper {
-  private static final int ROUNDS = 32;
-  private static final int DELTA = 0x9E3779B9;
-  private final int[] k;
+  private final Cipher enc;
+  private final Cipher dec;
 
   /**
    * Creates a new mapper with the given key.
    *
-   * @param key a 16-byte key, unique to the mapping
+   * @param key a key, unique to the mapping, from 4 bytes to 56 bytes long
    */
   public LongMapper(byte[] key) {
-    if (key.length != 16) {
-      throw new IllegalArgumentException("Key must be 16 bytes long");
+    try {
+      this.enc = Cipher.getInstance("Blowfish/ECB/NoPadding");
+      enc.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "Blowfish"));
+      this.dec = Cipher.getInstance("Blowfish/ECB/NoPadding");
+      dec.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "Blowfish"));
+    } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+      throw new UnsupportedOperationException(e);
+    } catch (InvalidKeyException e) {
+      throw new IllegalArgumentException(e);
     }
-    this.k =
-        new int[] {
-          key[0] << 24 | (key[1] & 0xFF) << 16 | (key[2] & 0xFF) << 8 | (key[3] & 0xFF),
-          key[4] << 24 | (key[5] & 0xFF) << 16 | (key[6] & 0xFF) << 8 | (key[7] & 0xFF),
-          key[8] << 24 | (key[9] & 0xFF) << 16 | (key[10] & 0xFF) << 8 | (key[11] & 0xFF),
-          key[12] << 24 | (key[13] & 0xFF) << 16 | (key[14] & 0xFF) << 8 | (key[15] & 0xFF)
-        };
   }
 
   /**
@@ -45,13 +52,13 @@ public class LongMapper {
    * @return another {@code long}, uniquely mapped to by {@code input}
    */
   public long map(long input) {
-    int v0 = (int) (input >> 32), v1 = (int) input, sum = 0;
-    for (int i = 0; i < ROUNDS; i++) {
-      v0 += (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum + k[sum & 3]);
-      sum += DELTA;
-      v1 += (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum + k[(sum >> 11) & 3]);
+    final byte[] bytes = Longs.toByteArray(input);
+    try {
+      enc.update(bytes, 0, 8, bytes, 0);
+    } catch (ShortBufferException e) {
+      throw new IllegalStateException(e);
     }
-    return (long) v0 << 32 | (v1 & 0xFFFFFFFFL);
+    return Longs.fromByteArray(bytes);
   }
 
   /**
@@ -61,12 +68,12 @@ public class LongMapper {
    * @return the original {@code long}
    */
   public long unmap(long input) {
-    int v0 = (int) (input >> 32), v1 = (int) input, sum = (int) ((long) DELTA * ROUNDS);
-    for (int i = 0; i < ROUNDS; i++) {
-      v1 -= (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum + k[(sum >> 11) & 3]);
-      sum -= DELTA;
-      v0 -= (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum + k[sum & 3]);
+    final byte[] bytes = Longs.toByteArray(input);
+    try {
+      dec.update(bytes, 0, 8, bytes, 0);
+    } catch (ShortBufferException e) {
+      throw new IllegalStateException(e);
     }
-    return (long) v0 << 32 | (v1 & 0xFFFFFFFFL);
+    return Longs.fromByteArray(bytes);
   }
 }
