@@ -17,14 +17,14 @@ package com.codahale.longmapper.tests;
 
 import com.codahale.longmapper.LongMapper;
 import java.util.Arrays;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.quicktheories.WithQuickTheories;
 import org.quicktheories.core.Gen;
 import org.quicktheories.impl.Constraint;
 
-public class LongMapperTest implements WithQuickTheories {
+class LongMapperTest implements WithQuickTheories {
   @Test
-  public void mappingIsBijective() {
+  void mappingIsBijective() {
     qt().forAll(keys(), longs().all())
         .check(
             (k, in) -> {
@@ -34,7 +34,7 @@ public class LongMapperTest implements WithQuickTheories {
   }
 
   @Test
-  public void mappingIsKeyDependent() {
+  void mappingIsKeyDependent() {
     qt().forAll(keys(), keys(), longs().all())
         .assuming((k1, k2, in) -> !Arrays.equals(k1, k2))
         .check(
