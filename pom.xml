@@ -250,6 +250,7 @@
           <compilerArgs>
             <arg>-Xep:NullAway:ERROR</arg>
             <arg>-XepOpt:NullAway:AnnotatedPackages=com.codahale</arg>
+            <arg>-XepExcludedPaths:.*target/.*generated.*</arg>
           </compilerArgs>
         </configuration>
         <dependencies>
