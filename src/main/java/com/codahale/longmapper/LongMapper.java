@@ -15,7 +15,8 @@
  */
 package com.codahale.longmapper;
 
-import com.google.common.primitives.Longs;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
@@ -53,13 +54,13 @@ public class LongMapper {
    * @return another {@code long}, uniquely mapped to by {@code input}
    */
   public long map(long input) {
-    final byte[] bytes = Longs.toByteArray(input);
+    final byte[] bytes = toBytes(input);
     try {
       enc.update(bytes, 0, 8, bytes, 0);
     } catch (ShortBufferException e) {
       throw new IllegalStateException(e);
     }
-    return Longs.fromByteArray(bytes);
+    return fromBytes(bytes);
   }
 
   /**
@@ -69,12 +70,20 @@ public class LongMapper {
    * @return the original {@code long}
    */
   public long unmap(long input) {
-    final byte[] bytes = Longs.toByteArray(input);
+    final byte[] bytes = toBytes(input);
     try {
       dec.update(bytes, 0, 8, bytes, 0);
     } catch (ShortBufferException e) {
       throw new IllegalStateException(e);
     }
-    return Longs.fromByteArray(bytes);
+    return fromBytes(bytes);
+  }
+
+  private static long fromBytes(byte[] b) {
+    return ByteBuffer.wrap(b).order(ByteOrder.BIG_ENDIAN).asLongBuffer().get();
+  }
+
+  private static byte[] toBytes(long v) {
+    return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putLong(v).array();
   }
 }

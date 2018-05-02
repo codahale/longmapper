@@ -15,6 +15,8 @@
  */
 package com.codahale.longmapper.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.codahale.longmapper.LongMapper;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,13 @@ import org.quicktheories.core.Gen;
 import org.quicktheories.impl.Constraint;
 
 class LongMapperTest implements WithQuickTheories {
+
+  @Test
+  void mappingIsConsistent() {
+    final LongMapper mapper = new LongMapper(new byte[12]);
+    assertThat(mapper.map(100)).isEqualTo(6891475626903759060L);
+  }
+
   @Test
   void mappingIsBijective() {
     qt().forAll(keys(), longs().all())
