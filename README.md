@@ -38,9 +38,7 @@ It's fast. Plenty fast.
 
 ```
 Benchmark         Mode  Cnt    Score   Error  Units
-Benchmarks.map    avgt   20  114.266 ± 3.772  ns/op
-Benchmarks.unmap  avgt   20  109.040 ± 2.356  ns/op
-
+Benchmarks.map    avgt   20  102.132 ± 8.190  ns/op
 ```
 
 ## License

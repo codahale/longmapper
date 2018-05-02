@@ -241,6 +241,11 @@
               <artifactId>nullaway</artifactId>
               <version>0.4.4</version>
             </path>
+            <path>
+              <groupId>org.openjdk.jmh</groupId>
+              <artifactId>jmh-generator-annprocess</artifactId>
+              <version>${jmh.version}</version>
+            </path>
           </annotationProcessorPaths>
           <compilerArgs>
             <arg>-Xep:NullAway:ERROR</arg>
