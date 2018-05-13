@@ -18,7 +18,6 @@ package com.codahale.longmapper.benchmarks;
 import com.codahale.longmapper.LongMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
-import org.openjdk.jmh.Main;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -30,10 +29,6 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
 public class Benchmarks {
-  public static void main(String[] args) throws Exception {
-    Main.main(args);
-  }
-
   private final LongMapper mapper =
       new LongMapper("ayellowsubmarine".getBytes(StandardCharsets.UTF_8));
 
