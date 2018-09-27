@@ -23,7 +23,6 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
-import org.jetbrains.annotations.Contract;
 
 /** A class which uniquely maps 64-bit integers to other 64-bit integers. */
 public class LongMapper {
@@ -54,7 +53,6 @@ public class LongMapper {
    * @param input an arbitrary {@code long}
    * @return another {@code long}, uniquely mapped to by {@code input}
    */
-  @Contract(pure = true)
   public long map(long input) {
     final byte[] bytes = toBytes(input);
     try {
@@ -71,7 +69,6 @@ public class LongMapper {
    * @param input a mapped {@code long}
    * @return the original {@code long}
    */
-  @Contract(pure = true)
   public long unmap(long input) {
     final byte[] bytes = toBytes(input);
     try {
