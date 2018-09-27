@@ -25,7 +25,7 @@
   </parent>
 
   <artifactId>longmapper</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <name>longmapper</name>
   <url>https://github.com/codahale/longmapper</url>
   <description>
@@ -37,7 +37,7 @@
     <connection>scm:git:https://github.com/codahale/longmapper.git</connection>
     <developerConnection>scm:git:https://github.com/codahale/longmapper.git</developerConnection>
     <url>https://github.com/codahale/longmapper</url>
-    <tag>HEAD</tag>
+    <tag>v0.1.1</tag>
   </scm>
 
   <build>
