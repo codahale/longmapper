@@ -1,6 +1,6 @@
 # LongMapper
 
-[![Build Status](https://secure.travis-ci.org/codahale/longmapper.svg)](http://travis-ci.org/codahale/longmapper)
+[![CircleCI](https://circleci.com/gh/codahale/longmapper.svg?style=svg)](https://circleci.com/gh/codahale/longmapper)
 
 ## Add to your project
 
@@ -8,18 +8,21 @@
 <dependency>
   <groupId>com.codahale</groupId>
   <artifactId>longmapper</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
+
+*Note: module name for Java 9+ is `com.codahale.longmapper`.*
 
 ## Use the thing
 
 ```java
+import static java.nio.charset.StandardCharsets.UTF_8;
 import com.codahale.longmapper.LongMapper;
 
 class Example {
   public static void main(String... args) {
-    final LongMapper mapper = new LongMapper("ayellowsubmarine".getBytes("UTF-8"));
+    final LongMapper mapper = new LongMapper("ayellowsubmarine".getBytes(UTF_8));
 
     System.out.printf("Mapped %d to %d\n", 200, mapper.map(200));
     System.out.printf("Unmapped %d to %d\n", mapper.map(200), mapper.unmap(mapper.map(200)));
